@@ -211,7 +211,7 @@ export function createAppServer() {
   });
 }
 
-function shouldStartServer() {
+export function shouldStartServer() {
   if (!process.argv[1]) {
     return false;
   }
@@ -225,11 +225,3 @@ if (shouldStartServer()) {
     console.log(`x-video-link-extractor running at http://${host}:${port}`);
   });
 }
-
-export {
-  collectVideos,
-  extractStatusId,
-  normalizeTweetUrl,
-  pickMp4Variants,
-  shouldStartServer,
-};
