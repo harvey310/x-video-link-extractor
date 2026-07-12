@@ -8,8 +8,30 @@ const videoList = document.querySelector("#video-list");
 const copyFirstButton = document.querySelector("#copy-first");
 const submitButton = document.querySelector("#submit-button");
 const template = document.querySelector("#video-card-template");
+const API_BASE = "https://api.fxtwitter.com/status";
 
 let latestDirectUrl = "";
+
+function extractStatusId(tweetUrl) {
+  let parsed;
+  try {
+    parsed = new URL(tweetUrl);
+  } catch {
+    throw new Error("请输入完整的推文地址");
+  }
+
+  const hostname = parsed.hostname.toLowerCase();
+  if (!["x.com", "www.x.com", "twitter.com", "www.twitter.com"].includes(hostname)) {
+    throw new Error("仅支持 x.com 或 twitter.com 的推文地址");
+  }
+
+  const match = parsed.pathname.match(/\/status\/(\d+)/);
+  if (!match) {
+    throw new Error("地址里没有找到推文编号");
+  }
+
+  return match[1];
+}
 
 function setMessage(text, type = "") {
   message.textContent = text;
@@ -59,6 +81,101 @@ function createVariantItem(variant) {
   link.textContent = `${label.join(" · ")} 直链`;
   li.append(link);
   return li;
+}
+
+function pickMp4Variants(video) {
+  const sourceVariants = Array.isArray(video.formats) && video.formats.length > 0
+    ? video.formats
+    : Array.isArray(video.variants)
+      ? video.variants
+      : [];
+
+  const mp4Variants = sourceVariants
+    .map((item) => ({
+      url: item.url,
+      bitrate: item.bitrate ?? 0,
+      width: item.width ?? null,
+      height: item.height ?? null,
+      contentType: item.content_type || item.container || ""
+    }))
+    .filter((item) => typeof item.url === "string" && (item.url.includes(".mp4") || item.contentType.includes("mp4")))
+    .sort((a, b) => (b.bitrate || 0) - (a.bitrate || 0));
+
+  if (mp4Variants.length === 0 && typeof video.url === "string" && video.url.includes(".mp4")) {
+    mp4Variants.push({
+      url: video.url,
+      bitrate: 0,
+      width: video.width ?? null,
+      height: video.height ?? null,
+      contentType: "video/mp4"
+    });
+  }
+
+  return mp4Variants;
+}
+
+function normalizeVideo(video, index, source) {
+  const variants = pickMp4Variants(video);
+  if (variants.length === 0) {
+    return null;
+  }
+
+  const bestVariant = variants[0];
+  return {
+    id: video.id || `${source}-${index + 1}`,
+    source,
+    title: `${source === "quote" ? "引用推文" : "当前推文"}视频 ${index + 1}`,
+    thumbnailUrl: video.thumbnail_url || "",
+    durationSeconds: video.duration ?? null,
+    width: video.width ?? bestVariant.width ?? null,
+    height: video.height ?? bestVariant.height ?? null,
+    directUrl: bestVariant.url,
+    variants
+  };
+}
+
+function collectVideos(tweet) {
+  const currentVideos = (tweet?.media?.videos || [])
+    .map((video, index) => normalizeVideo(video, index, "tweet"))
+    .filter(Boolean);
+  const quoteVideos = (tweet?.quote?.media?.videos || [])
+    .map((video, index) => normalizeVideo(video, index, "quote"))
+    .filter(Boolean);
+
+  const allVideos = [...currentVideos, ...quoteVideos];
+  if (allVideos.length === 0) {
+    throw new Error("这条推文里没有可下载的视频");
+  }
+
+  return allVideos;
+}
+
+async function fetchTweetVideos(tweetUrl) {
+  const statusId = extractStatusId(tweetUrl);
+  const response = await fetch(`${API_BASE}/${statusId}`, {
+    headers: {
+      Accept: "application/json"
+    }
+  });
+
+  if (!response.ok) {
+    throw new Error(`解析服务返回异常：${response.status}`);
+  }
+
+  const payload = await response.json();
+  if (payload?.code !== 200 || !payload.tweet) {
+    throw new Error(payload?.message || "解析服务没有返回有效结果");
+  }
+
+  return {
+    statusId,
+    tweetUrl: payload.tweet.url || tweetUrl,
+    author: payload.tweet.author?.screen_name || "",
+    authorName: payload.tweet.author?.name || "",
+    text: payload.tweet.text || "",
+    createdAt: payload.tweet.created_at || "",
+    videos: collectVideos(payload.tweet)
+  };
 }
 
 function renderVideos(payload) {
@@ -121,19 +238,7 @@ form.addEventListener("submit", async (event) => {
   setMessage("正在解析，请稍等...");
 
   try {
-    const response = await fetch("/api/extract", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({ url })
-    });
-
-    const payload = await response.json();
-    if (!response.ok) {
-      throw new Error(payload.error || "解析失败");
-    }
-
+    const payload = await fetchTweetVideos(url);
     renderVideos(payload);
     setMessage("解析成功，可以直接点击打开或下载", "success");
   } catch (error) {
@@ -156,4 +261,3 @@ copyFirstButton.addEventListener("click", async () => {
     setMessage("复制失败，请手动复制页面里的直链", "error");
   }
 });
-

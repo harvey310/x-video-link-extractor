@@ -1,6 +1,6 @@
 # X 推文视频下载工具
 
-一个可以直接部署的 H5 工具。
+一个可以直接部署到帽子云这类静态平台的 H5 工具。
 
 你只需要粘贴 `x.com` 或 `twitter.com` 的推文地址，页面就会返回可点击、可下载的 `video.twimg.com` 视频直链。
 
@@ -17,11 +17,10 @@
 ## 技术架构
 
 - 前端：原生 HTML + CSS + JavaScript
-- 后端：Node.js 原生 `http` 服务
-- 解析来源：`api.fxtwitter.com/status/{id}`
-- 部署方式：代码先放 GitHub，再接任意支持 Node 的托管平台
+- 解析来源：浏览器直接请求 `api.fxtwitter.com/status/{id}`
+- 部署方式：直接部署 `public/` 到任意静态网站平台
 
-## 本地运行
+## 本地预览
 
 要求：
 
@@ -74,17 +73,19 @@ gh repo create x-video-link-extractor --public --source . --remote origin --push
 
 ### 云平台
 
-这个项目是标准 Node 服务，支持以下方式：
+这个项目已经改成纯静态版，帽子云可直接这样配：
 
-- 直接从 GitHub 导入，启动命令填 `npm start`
-- 容器部署时，暴露 `PORT` 环境变量即可
-- 如果平台支持自动识别 Node 项目，通常无需额外改造
+- 分支：`main`
+- 根目录：`public`
+- 构建命令：留空
+- 输出目录：留空
+- 构建环境变量：留空
+
+如果平台不支持直接选子目录，也可以先把 `public/` 里的三个文件单独上传。
 
 ## 环境变量
 
-- `PORT`：服务端口，默认 `3000`
-- `HOST`：监听地址，默认 `0.0.0.0`
-- `FXTWITTER_API_BASE`：解析接口地址，默认 `https://api.fxtwitter.com/status`
+静态部署不需要额外环境变量。
 
 ## 搜索记录
 
@@ -95,15 +96,13 @@ gh repo create x-video-link-extractor --public --source . --remote origin --push
 ## 已完成功能
 
 - H5 输入页
-- 同域解析接口
+- 浏览器直连公开解析接口
 - 结果列表渲染
 - 多清晰度展示
 - 复制与下载
-- GitHub Actions 自动测试
-- 可直接被云平台从 GitHub 拉起
+- 可直接部署到静态网站平台
 
 ## 待办事项
 
 - 增加受限推文的登录态支持
-- 增加 `yt-dlp` 自建后端可切换模式
 - 增加更完整的异常监控

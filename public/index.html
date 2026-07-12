@@ -8,7 +8,7 @@
       name="description"
       content="输入 X 推文地址，提取可点击下载的 video.twimg.com 视频链接。"
     />
-    <link rel="stylesheet" href="/styles.css" />
+    <link rel="stylesheet" href="./styles.css" />
   </head>
   <body>
     <main class="page">
@@ -16,7 +16,7 @@
         <p class="eyebrow">X Video Link Extractor</p>
         <h1>粘贴推文地址，直接拿到可下载视频链接</h1>
         <p class="hero-text">
-          页面会从推文里提取 MP4 直链。适合手机 H5 打开，也适合后续放到云平台直接部署。
+          页面会直接请求公开解析接口提取 MP4 直链。适合手机 H5 打开，也适合直接部署到帽子云这类静态站平台。
         </p>
       </section>
 
@@ -75,7 +75,6 @@
       </article>
     </template>
 
-    <script type="module" src="/app.js"></script>
+    <script type="module" src="./app.js"></script>
   </body>
 </html>
-
