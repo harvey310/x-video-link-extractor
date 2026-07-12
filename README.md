@@ -57,11 +57,19 @@ npm test
 
 ### GitHub
 
+当前仓库：
+
+```text
+https://github.com/harvey310/x-video-link-extractor
+```
+
+如果你要新建同类仓库，可以用：
+
 ```bash
 git init
 git add .
 git commit -m "feat: add x video extractor"
-gh repo create x-video-link-extractor --private --source . --remote origin --push
+gh repo create x-video-link-extractor --public --source . --remote origin --push
 ```
 
 ### 云平台
