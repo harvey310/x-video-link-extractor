@@ -121,6 +121,8 @@ button:hover,
 
 #submit-button {
   font-weight: 600;
+  min-height: 58px;
+  padding: 0 18px;
 }
 
 .secondary,
@@ -289,4 +291,3 @@ button:hover,
     height: 200px;
   }
 }
-
