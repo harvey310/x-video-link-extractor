@@ -2,10 +2,15 @@
   "name": "x-video-link-extractor",
   "version": "1.0.0",
   "private": true,
+  "description": "从 X 推文地址提取可下载视频地址的 H5 工具",
   "type": "module",
+  "engines": {
+    "node": ">=20"
+  },
   "scripts": {
-    "test": "node --test tests/app.test.js",
-    "check": "node --check site/assets/app.js && node --check worker/src/index.js"
-  }
+    "start": "node server.js",
+    "dev": "node --watch server.js",
+    "test": "node --test"
+  },
+  "license": "MIT"
 }
-

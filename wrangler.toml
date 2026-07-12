@@ -1,8 +1,0 @@
-name = "x-video-link-extractor"
-main = "worker/src/index.js"
-compatibility_date = "2026-07-12"
-
-[vars]
-ALLOWED_ORIGIN = "*"
-UPSTREAM_API_BASE = "https://api.fxtwitter.com"
-
