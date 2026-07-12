@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>X 推文视频下载工具</title>
+    <meta
+      name="description"
+      content="输入 X 推文地址，提取可点击下载的 video.twimg.com 视频链接。"
+    />
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <main class="page">
+      <section class="hero">
+        <p class="eyebrow">X Video Link Extractor</p>
+        <h1>粘贴推文地址，直接拿到可下载视频链接</h1>
+        <p class="hero-text">
+          页面会从推文里提取 MP4 直链。适合手机 H5 打开，也适合后续放到云平台直接部署。
+        </p>
+      </section>
+
+      <section class="panel">
+        <form id="extract-form" class="form">
+          <label for="tweet-url" class="label">X 推文地址</label>
+          <div class="input-row">
+            <input
+              id="tweet-url"
+              name="tweet-url"
+              type="url"
+              inputmode="url"
+              placeholder="https://x.com/i/status/2074866092632068203"
+              required
+            />
+            <button id="submit-button" type="submit">开始提取</button>
+          </div>
+          <p class="hint">支持 `x.com/.../status/数字` 和 `twitter.com/.../status/数字`。</p>
+        </form>
+
+        <div id="message" class="message" aria-live="polite"></div>
+
+        <section id="result" class="result hidden">
+          <div class="result-head">
+            <div>
+              <p class="result-label">解析结果</p>
+              <h2 id="result-title">视频列表</h2>
+            </div>
+            <button id="copy-first" type="button" class="secondary">复制第一条直链</button>
+          </div>
+          <div id="meta" class="meta"></div>
+          <div id="video-list" class="video-list"></div>
+        </section>
+      </section>
+    </main>
+
+    <template id="video-card-template">
+      <article class="video-card">
+        <img class="thumb" alt="视频封面" />
+        <div class="video-body">
+          <div class="video-head">
+            <h3 class="video-title"></h3>
+            <span class="video-badge"></span>
+          </div>
+          <p class="video-meta"></p>
+          <div class="actions">
+            <a class="action primary" target="_blank" rel="noreferrer">打开直链</a>
+            <a class="action" target="_blank" rel="noreferrer" download>下载视频</a>
+            <button class="action copy" type="button">复制链接</button>
+          </div>
+          <details class="variants">
+            <summary>查看全部清晰度</summary>
+            <ul class="variant-list"></ul>
+          </details>
+        </div>
+      </article>
+    </template>
+
+    <script type="module" src="/app.js"></script>
+  </body>
+</html>
+
