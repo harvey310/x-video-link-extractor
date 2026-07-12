@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>X 推文视频下载工具</title>
+    <meta
+      name="description"
+      content="粘贴 X 推文链接，提取可点击的视频地址并直接下载。"
+    />
+    <link rel="stylesheet" href="./assets/styles.css" />
+  </head>
+  <body>
+    <main class="page">
+      <section class="hero">
+        <p class="eyebrow">X Video Link Extractor</p>
+        <h1>粘贴推文地址，直接拿到可下载视频</h1>
+        <p class="summary">
+          前端负责交互，解析和下载由代理服务完成。先适合部署到 GitHub，
+          再接到帽子云这类平台继续使用。
+        </p>
+      </section>
+
+      <section class="panel">
+        <label class="label" for="apiBase">代理地址</label>
+        <input
+          id="apiBase"
+          class="input"
+          type="url"
+          placeholder="https://你的-worker-域名"
+        />
+        <p class="hint">
+          第一次打开可先填 Worker 地址。填过一次后，浏览器会自动记住。
+        </p>
+
+        <label class="label" for="tweetUrl">X 推文地址</label>
+        <textarea
+          id="tweetUrl"
+          class="textarea"
+          placeholder="https://x.com/i/status/2074866092632068203"
+        ></textarea>
+
+        <div class="actions">
+          <button id="extractButton" class="button primary">提取视频</button>
+          <button id="exampleButton" class="button secondary">填入示例</button>
+        </div>
+
+        <p id="status" class="status" aria-live="polite"></p>
+      </section>
+
+      <section id="resultSection" class="result hidden">
+        <div class="result-head">
+          <h2>解析结果</h2>
+          <button id="copyAllButton" class="button ghost">复制全部地址</button>
+        </div>
+        <article id="tweetCard" class="tweet-card"></article>
+        <div id="videoList" class="video-list"></div>
+      </section>
+    </main>
+
+    <script type="module" src="./assets/app.js"></script>
+  </body>
+</html>
+
