@@ -81,13 +81,16 @@ h1 {
 
 .input-row {
   display: grid;
-  grid-template-columns: 1fr 160px;
+  grid-template-columns: 1fr minmax(240px, 300px);
   gap: 12px;
+  align-items: stretch;
 }
 
-.button-stack {
+.button-row {
   display: grid;
+  grid-template-columns: 1fr 1fr;
   gap: 12px;
+  align-items: stretch;
 }
 
 input,
@@ -126,8 +129,14 @@ button:hover,
 
 #submit-button {
   font-weight: 600;
-  min-height: 108px;
+  min-height: 72px;
   padding: 0 18px;
+}
+
+#reset-button {
+  min-height: 72px;
+  padding: 0 18px;
+  font-weight: 600;
 }
 
 .secondary,
@@ -276,6 +285,10 @@ button:hover,
   .input-row,
   .video-card {
     grid-template-columns: 1fr;
+  }
+
+  .button-row {
+    grid-template-columns: 1fr 1fr;
   }
 
   .result-head {
