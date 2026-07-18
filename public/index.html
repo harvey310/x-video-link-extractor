@@ -29,7 +29,10 @@
               placeholder="https://x.com/i/status/2074866092632068203"
               required
             />
-            <button id="submit-button" type="submit">开始提取</button>
+            <div class="button-stack">
+              <button id="submit-button" type="submit">开始提取</button>
+              <button id="reset-button" type="button" class="secondary">重置</button>
+            </div>
           </div>
           <p class="hint">支持 `x.com/.../status/数字` 和 `twitter.com/.../status/数字`。</p>
         </form>
@@ -42,7 +45,6 @@
               <p class="result-label">解析结果</p>
               <h2 id="result-title">视频列表</h2>
             </div>
-            <button id="copy-first" type="button" class="secondary">复制第一条直链</button>
           </div>
           <div id="meta" class="meta"></div>
           <div id="video-list" class="video-list"></div>
@@ -59,15 +61,7 @@
             <span class="video-badge"></span>
           </div>
           <p class="video-meta"></p>
-          <div class="actions">
-            <a class="action primary" target="_blank" rel="noreferrer">打开直链</a>
-            <a class="action" target="_blank" rel="noreferrer" download>下载视频</a>
-            <button class="action copy" type="button">复制链接</button>
-          </div>
-          <details class="variants">
-            <summary>查看全部清晰度</summary>
-            <ul class="variant-list"></ul>
-          </details>
+          <ul class="variant-list"></ul>
         </div>
       </article>
     </template>

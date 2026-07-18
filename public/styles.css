@@ -85,6 +85,11 @@ h1 {
   gap: 12px;
 }
 
+.button-stack {
+  display: grid;
+  gap: 12px;
+}
+
 input,
 button,
 .action {
@@ -121,7 +126,7 @@ button:hover,
 
 #submit-button {
   font-weight: 600;
-  min-height: 58px;
+  min-height: 108px;
   padding: 0 18px;
 }
 
@@ -241,29 +246,20 @@ button:hover,
   line-height: 1.6;
 }
 
-.actions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-}
-
-.action {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 42px;
-  padding: 0 16px;
-}
-
-.variants summary {
-  cursor: pointer;
-  color: var(--accent-dark);
-}
-
 .variant-list {
-  margin: 10px 0 0;
+  margin: 6px 0 0;
   padding-left: 18px;
   line-height: 1.8;
+}
+
+.variant-list a {
+  color: var(--accent-dark);
+  text-decoration: none;
+  word-break: break-all;
+}
+
+.variant-list a:hover {
+  text-decoration: underline;
 }
 
 @media (max-width: 720px) {

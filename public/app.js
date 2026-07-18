@@ -5,12 +5,10 @@ const result = document.querySelector("#result");
 const resultTitle = document.querySelector("#result-title");
 const meta = document.querySelector("#meta");
 const videoList = document.querySelector("#video-list");
-const copyFirstButton = document.querySelector("#copy-first");
 const submitButton = document.querySelector("#submit-button");
+const resetButton = document.querySelector("#reset-button");
 const template = document.querySelector("#video-card-template");
 const API_BASE = "https://api.fxtwitter.com/status";
-
-let latestDirectUrl = "";
 
 function extractStatusId(tweetUrl) {
   let parsed;
@@ -61,14 +59,9 @@ function formatBitrate(bitrate) {
   return `${Math.round(bitrate / 1000)} kbps`;
 }
 
-async function copyText(text) {
-  await navigator.clipboard.writeText(text);
-  setMessage("已复制到剪贴板", "success");
-}
-
 function createVariantItem(variant) {
   const li = document.createElement("li");
-  const label = [];
+  const label = ["点击打开"];
   if (variant.width && variant.height) {
     label.push(`${variant.width}x${variant.height}`);
   }
@@ -192,26 +185,13 @@ function renderVideos(payload) {
     const title = fragment.querySelector(".video-title");
     const badge = fragment.querySelector(".video-badge");
     const videoMeta = fragment.querySelector(".video-meta");
-    const openLink = fragment.querySelector(".action.primary");
-    const downloadLink = fragment.querySelector(".action[download]");
-    const copyButton = fragment.querySelector(".copy");
     const variantList = fragment.querySelector(".variant-list");
 
     thumb.src = video.thumbnailUrl || "";
     thumb.alt = `${video.title} 封面`;
     title.textContent = video.title;
     badge.textContent = video.source === "quote" ? "引用推文" : "当前推文";
-    videoMeta.textContent = `${video.width || "未知"}x${video.height || "未知"} ｜ ${formatDuration(video.durationSeconds)} ｜ 默认输出最高码率 MP4`;
-
-    openLink.href = video.directUrl;
-    downloadLink.href = video.directUrl;
-    copyButton.addEventListener("click", async () => {
-      try {
-        await copyText(video.directUrl);
-      } catch {
-        setMessage("复制失败，请手动长按链接复制", "error");
-      }
-    });
+    videoMeta.textContent = `${video.width || "未知"}x${video.height || "未知"} ｜ ${formatDuration(video.durationSeconds)} ｜ 直接点下面链接打开视频`;
 
     video.variants.forEach((variant) => {
       variantList.append(createVariantItem(variant));
@@ -219,8 +199,6 @@ function renderVideos(payload) {
 
     videoList.append(fragment);
   });
-
-  latestDirectUrl = payload.videos[0]?.directUrl || "";
   result.classList.remove("hidden");
 }
 
@@ -249,15 +227,11 @@ form.addEventListener("submit", async (event) => {
   }
 });
 
-copyFirstButton.addEventListener("click", async () => {
-  if (!latestDirectUrl) {
-    setMessage("还没有可复制的结果", "error");
-    return;
-  }
-
-  try {
-    await copyText(latestDirectUrl);
-  } catch {
-    setMessage("复制失败，请手动复制页面里的直链", "error");
-  }
+resetButton.addEventListener("click", () => {
+  input.value = "";
+  result.classList.add("hidden");
+  videoList.innerHTML = "";
+  meta.textContent = "";
+  setMessage("");
+  input.focus();
 });
